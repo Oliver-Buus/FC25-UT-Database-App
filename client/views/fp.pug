@@ -1,0 +1,27 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Document
+    body
+        table
+            thead
+                tr
+                    th Spiller
+            tbody
+                each name, index in playerNames
+                    tr
+                        td
+                            a(href=playerUrls[index], target="_blank")= name
+
+
+        table
+            thead 
+                tr 
+                    th SPILLER 
+            tbody 
+                each player in players 
+                    tr 
+                        td 
+                            a(href=player.playerUrl, target="_blank")= player.playerName
