@@ -1,6 +1,8 @@
 import express from 'express';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
+import * as domScraper from './server/domScraper.js';
+import Player from './server/player.js'
 
 const app = express();
 
@@ -8,9 +10,9 @@ const app = express();
 app.set('view engine', 'pug'); // sets pug as the view engine
 app.set('views', './client/views')
 
-const playerUrls = []
-const playerNames = []
+
 const players = []
+const playerUrls = []
 
 const url = 'https://www.fut.gg/players/?page='
 for (let index = 1; index <= 10; index++) {
@@ -25,7 +27,7 @@ app.get('/', async (req, res) => {
         //max page er 933
 
         // Render Pug view og send spillernavne
-        res.render('fp', {playerUrls, playerNames, players});
+        res.render('fp', {players});
     } catch (error) {
         console.error('Der opstod en fejl:', error);
         res.status(500).send('Intern serverfejl');
@@ -40,7 +42,6 @@ async function getPlayerURLs(url) {
 
         const $ = cheerio.load(html);
         const body = $('body div.flex-1 main.global-content div.container div.grid div div.bg-dark-gray')
-
 
         body.find('div.-my-3').each((index, element) => {
             const linkElement = $(element).find('a');
@@ -66,13 +67,37 @@ async function getPlayerName(playerUrl) {
 
         const html = response.data
         const $ = cheerio.load(html);
-        const h1Element = $('div.container div div div div.mt-2 div h1').clone();
-        h1Element.find('span').remove();
-        const playerName = h1Element.text().trim();
+        
+        
+        const playerNameShort = domScraper.getPlayerNameShort($)
+        const playerNameFull = domScraper.getPlayerNameFull($)
+        const overall = domScraper.getOverallRating($)
+        const club = domScraper.getClub($)
+        const nationality = domScraper.getNationality($)
+        const league = domScraper.getLeague($)
+        const foot = domScraper.getFoot($)
+        const sm = domScraper.getSkillMoves($)
+        const wf = domScraper.getWeakFoot($)
+        const accelerate = domScraper.getAcceleRATE($)
+        const height = domScraper.getHeight($)
+        const weight = domScraper.getWeight($)
+        const bodyType = domScraper.getBodyType($)
+        const age = domScraper.getAge($)
+        const playerID = domScraper.getPlayerID($)
+        const itemID = domScraper.getItemID($)
+        const addedOn = domScraper.getAddedOn($)
 
-        //console.log(playerName);
-        playerNames.push(playerName)
-        players.push({playerName, playerUrl });
+
+        const player = new Player(playerNameShort, playerNameFull, overall, club, nationality, league, foot, sm, wf, accelerate, height, weight, bodyType, age, playerID, itemID, addedOn, playerUrl)
+        players.push(player);
+
+
+
+        console.log(`Name: ${playerNameShort} (${playerNameFull}), Club: ${club}, Nationality: ${nationality}, League: ${league}, Foot: ${foot}, SM: ${sm}`);
+        console.log(`WF: ${wf}, AcceleRATE: ${accelerate}, Height: ${height}, Weight: ${weight}, BodyType: ${bodyType}, Age: ${age}, PlayerID: ${playerID}, ItemID: ${itemID}, AddedOn: ${addedOn}`);
+        //console.log(`${playerName} plays for ${club} in $and is from ${nationality}`);
+        
+
     } catch (error) {
         console.error('Der opstod en fejl ved hentning af spillernavn:', error);
         //res.status(500).send('Intern serverfejl');
