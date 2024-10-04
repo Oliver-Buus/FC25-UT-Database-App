@@ -9,30 +9,52 @@ const app = express();
 
 app.set('view engine', 'pug'); // sets pug as the view engine
 app.set('views', './client/views')
+app.use(express.static('client/assets'))
 
 
 const players = []
 const playerUrls = []
 
 const url = 'https://www.fut.gg/players/?page='
-for (let index = 1; index <= 10; index++) {
+for (let index = 1; index <= 100; index++) {
     await getPlayerURLs(`${url}${index}`)
-}
-
+};
 playerUrls.forEach(url => getPlayerName(url));
+
+
 
 app.get('/', async (req, res) => {
     try {
         const url = 'https://www.fut.gg/players/?page='
         //max page er 933
 
+        players.sort((a, b) => b.overall - a.overall)
         // Render Pug view og send spillernavne
-        res.render('fp', {players});
+        res.render('fp', {players: players});
     } catch (error) {
         console.error('Der opstod en fejl:', error);
         res.status(500).send('Intern serverfejl');
     }
 });
+
+app.get('/:player', async (req, res) => {
+    const itemID = req.params.player
+
+    const player = players.find(player => player.itemID == itemID)
+
+    res.render('playerPage', {player: player})
+    res.end()
+})
+
+
+// If endpoint doesn't exist af 404 error is send.
+app.get('/*', function(req, res) {
+    console.log("404 error");
+    // TODO
+    // Actually make a page that shows an error code
+    res.sendStatus(404);
+})
+
 
 async function getPlayerURLs(url) {
     try {
@@ -61,6 +83,8 @@ async function getPlayerURLs(url) {
     return playerUrls
 }
 
+
+
 async function getPlayerName(playerUrl) {
     try {
         const response = await axios.get(playerUrl);
@@ -88,13 +112,36 @@ async function getPlayerName(playerUrl) {
         const addedOn = domScraper.getAddedOn($)
 
 
-        const player = new Player(playerNameShort, playerNameFull, overall, club, nationality, league, foot, sm, wf, accelerate, height, weight, bodyType, age, playerID, itemID, addedOn, playerUrl)
+
+        const player = new Player(playerNameShort, playerNameFull, overall, club, 
+            nationality, league, foot, sm, wf, accelerate, height, weight, bodyType, 
+            age, playerID, itemID, addedOn, playerUrl)
         players.push(player);
 
 
 
-        console.log(`Name: ${playerNameShort} (${playerNameFull}), Club: ${club}, Nationality: ${nationality}, League: ${league}, Foot: ${foot}, SM: ${sm}`);
-        console.log(`WF: ${wf}, AcceleRATE: ${accelerate}, Height: ${height}, Weight: ${weight}, BodyType: ${bodyType}, Age: ${age}, PlayerID: ${playerID}, ItemID: ${itemID}, AddedOn: ${addedOn}`);
+        console.log(`
+            Name: ${playerNameShort} (${playerNameFull})
+            Overall: ${overall}
+            Club: ${club}
+            Nationality: ${nationality}
+            League: ${league}
+            
+            Foot: ${foot}
+            SM: ${sm}
+            WF: ${wf}
+            AcceleRATE: ${accelerate}
+            Height: ${height}
+            Weight: ${weight}
+            Body Type: ${bodyType}
+            Age: ${age}
+            
+            Player ID: ${playerID}
+            Item ID: ${itemID}
+            Added On: ${addedOn}
+            `);
+            
+        
         //console.log(`${playerName} plays for ${club} in $and is from ${nationality}`);
         
 
@@ -104,19 +151,5 @@ async function getPlayerName(playerUrl) {
     }
 }
 
-// If endpoint doesn't exist af 404 error is send.
-app.get('/*', function(req, res) {
-    console.log("404 error");
-    // TODO
-    // Actually make a page that shows an error code
-    res.sendStatus(404);
-})
-
 
 app.listen(8080, () => console.log("Serveren kører på port 8080"));
-
-
-
-
-
-

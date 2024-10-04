@@ -1,0 +1,92 @@
+/* Global styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+    background-color: #333;
+    color: #fff;
+}
+
+thead th {
+    padding: 12px;
+    text-align: left;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f0f0f0;
+}
+
+tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+tbody tr:hover {
+    background-color: #e2e2e2;
+}
+
+a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Style for player name links */
+.playerName a {
+    font-weight: bold;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.playerName a:hover {
+    color: #ff5733; /* A nice orange hover effect */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    tbody tr {
+        margin-bottom: 15px;
+    }
+
+    tbody td {
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    thead {
+        display: none; /* Hide table header on small screens */
+    }
+
+    tbody td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        display: block;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+    }
+}

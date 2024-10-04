@@ -1,0 +1,14 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        script.
+            const player = !{JSON.stringify(player)};
+        script(src="/js/playerPage.js", defer)
+        title= player.name 
+
+    body 
+
+    h1= player.name
+    h2= player.club

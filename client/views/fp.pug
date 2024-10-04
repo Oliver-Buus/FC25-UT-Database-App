@@ -3,15 +3,18 @@ html(lang="en")
     head
         meta(charset="UTF-8")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        title Document
+        link(rel="stylesheet", href="css/frontPage.css")
+        title Players
     body
         table
             thead 
                 tr 
-                    th SPILLER 
-                    th OVERALL
+                    th Player(Fut.gg) 
+                    th Rating
                     th CLUB
                     th LEAGUE
+                    th AGE
+                    th Player(My page)
             tbody 
                 each player in players 
                     tr 
@@ -20,4 +23,6 @@ html(lang="en")
                         td= player.overall
                         td= player.club
                         td= player.league
-                        
+                        td= player.age
+                        td(class="playerName", playerItemID=player.itemID)
+                            a(href=`${player.itemID}`, target="_blank") #{player.name}

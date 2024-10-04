@@ -2,228 +2,222 @@
 
 
 function getPlayerNameShort(cheerioLoadedHTML) {
-    //TODO error handling
 
-    const playerNameShort = cheerioLoadedHTML('div.flex-1')        
-    .find('div.container')
-    .eq(3)
-    .find('h1')
+    const playerName = cheerioLoadedHTML('h1.font-bold.text-3xl.md\\:text-4xl')
     .clone()
-    .find('span').remove()
+    .find('span')
+    .remove()
     .end()
     .text()
-    .trim()
-
-    return playerNameShort
+    .trim();
+    return playerName
 }
 
 function getPlayerNameFull(cheerioLoadedHTML) {
-    //TODO error handling
 
-    const infoBlock = cheerioLoadedHTML('div.paper.mb-3.hidden.md\\:block')
-    const playerNameFull = infoBlock
-    .find('div.flex.justify-between')
-    .eq(0)
-    .find('div:last-child').text().trim();
+    // Find where the name is located in the html-file
+    const nameRow = cheerioLoadedHTML('div.flex.justify-between')
+    .filter((index, element) => {
+        return cheerioLoadedHTML(element).children().eq(0).text().trim() === 'Name'
+    });
 
-    return playerNameFull
+    if(nameRow.length > 0) {
+        return nameRow.children().eq(1).text().trim();
+    }
 }
 
 function getOverallRating(cheerioLoadedHTML) {
 
-    let overall = cheerioLoadedHTML('div.flex-1')        
-    .find('div.container')
-    .eq(3)
-    .find('h1')
-    .find('span')
+    let ovr = cheerioLoadedHTML('span.text-lighter-gray.font-bold.hidden.md\\:inline-block.text-base.ml-2')
     .text()
     .trim()
 
-    overall = overall.split(' ')[0]
-
-    return overall
+    return ovr.split(' ')[0]
 }
 
 function getClub(cheerioLoadedHTML) {
-    //TODO error handling
+    const clubRow = cheerioLoadedHTML('div.flex.justify-between.flex-row.mt-2')
+    .filter((index, element) => {
+        return cheerioLoadedHTML(element).children().eq(0).text().trim() === 'Club'
+    });
 
-    // HERO-kort har ingen klub, så skal håndteres anderledes.
 
-    const infoBlock = cheerioLoadedHTML('div.paper.mb-3.hidden.md\\:block')
-    const club = infoBlock
-    .find('div.flex.justify-between.flex-row.mt-2')
-    .eq(0)
-    .find('a')
-    .text()
-    .trim()
+    if (clubRow.length > 0) {
+        const clubContainer = clubRow.children().eq(1);
+        const clubLink = clubContainer.find('a')
+        const clubName = clubLink.text().trim();
 
-    return club
+        return clubName;
+    }
+
+    return null;
 }
 
 function getNationality(cheerioLoadedHTML) {
-    //TODO error handling
-    const infoBlock = cheerioLoadedHTML('div.paper.mb-3.hidden.md\\:block')
-    const nationality = infoBlock
-    .find('div.flex.justify-between.flex-row.mt-2')
-    .eq(1)
-    .find('a')
-    .text()
-    .trim()
+    const nationRow = cheerioLoadedHTML('div.flex.justify-between.flex-row.mt-2')
+    .filter((index, element) => {
+        return cheerioLoadedHTML(element).children().eq(0).text().trim() === 'Nation'
+    });
 
-    return nationality
+    if (nationRow.length > 0) {
+        const nationContainer = nationRow.children().eq(1);
+        const nationLink = nationContainer.find('a')
+        const nation = nationLink.text().trim();
 
+        return nation;
+    }
 }
 
 function getLeague(cheerioLoadedHTML) {
-    // TODO error handling
+    const leagueRow = cheerioLoadedHTML('div.flex.justify-between.mt-2')
+    .filter((index, element) => {
+        return cheerioLoadedHTML(element).children().eq(0).text().trim() === 'League'
+    });
 
-    const infoBlock = cheerioLoadedHTML('div.paper.mb-3.hidden.md\\:block')
-    const league = infoBlock
-    .find('div.flex.justify-between.mt-2')
-    .eq(2)
-    .find('a')
-    .text()
-    .trim()
+    if (leagueRow.length > 0) {
+        const leagueContainer = leagueRow.children().eq(1);
+        const leagueLink = leagueContainer.find('a')
+        const league = leagueLink.text().trim();
 
-    return league
+        return league;
+    }
 }
 
 function getFoot(cheerioLoadedHTML) {
-    // TODO error handling
 
-    const foot = cheerioLoadedHTML('div.flex.justify-between.mt-2')
-    .eq(3)
-    .children()
-    .eq(1)
-    .text()
-    .trim()
+    const footRow = cheerioLoadedHTML('div.flex.justify-between.mt-2')
+    .filter((index, element) => {
+        return cheerioLoadedHTML(element).children().eq(0).text().trim() === 'Foot'
+    });
 
-    return foot
+    if(footRow.length > 0) {
+        return footRow.children().eq(1).text().trim();
+    }
 }
 
 function getSkillMoves(cheerioLoadedHTML) {
 
-    const skillMoves = cheerioLoadedHTML('div.flex.justify-between.mt-2')
-    .eq(4)
-    .children()
-    .eq(1)
-    .clone()
-    .find('span').remove()
-    .end()
-    .text()
-    .trim()
+    const skillMovesRow = cheerioLoadedHTML('div.flex.justify-between.mt-2')
+    .filter((index, element) => {
+        return cheerioLoadedHTML(element).children().eq(0).text().trim() === 'Skill Moves'
+    });
 
-    return skillMoves
-
+    if(skillMovesRow.length > 0) {
+        const skillMovesContainer = skillMovesRow.children().eq(1)
+        const skillMovesSpanRemoved = skillMovesContainer.clone().children().remove().end()
+        const skillMoves = skillMovesSpanRemoved.text().trim()
+        return skillMoves
+    }
 }
 
 function getWeakFoot(cheerioLoadedHTML) {
 
-    const weakFoot = cheerioLoadedHTML('div.flex.justify-between.mt-2')
-    .eq(5)
-    .children()
-    .eq(1)
-    .clone()
-    .find('span').remove()
-    .end()
-    .text()
-    .trim()
+    const weakFootRow = cheerioLoadedHTML('div.flex.justify-between.mt-2')
+    .filter((index, element) => {
+        return cheerioLoadedHTML(element).children().eq(0).text().trim() === 'Weak Foot'
+    });
 
-    return weakFoot
+    if(weakFootRow.length > 0) {
+        const weakFootContainer = weakFootRow.children().eq(1)
+        const weakFootSpanRemoved = weakFootContainer.clone().children().remove().end()
+        const weakFoot = weakFootSpanRemoved.text().trim()
+        return weakFoot
+    }
 }
 
 function getAcceleRATE(cheerioLoadedHTML) {
 
-    const accelerate = cheerioLoadedHTML('div.flex.justify-between.mt-2')
-    .eq(6)
-    .children()
-    .eq(1)
-    .text()
-    .trim()
+    const AcceleRATERow = cheerioLoadedHTML('div.flex.justify-between.mt-2')
+    .filter((index, element) => {
+        return cheerioLoadedHTML(element).children().eq(0).text().trim() === 'AcceleRATE'
+    });
 
-    return accelerate
-
+    if(AcceleRATERow.length > 0) {
+        return AcceleRATERow.children().eq(1).text().trim();
+    }
 }
 
 function getHeight(cheerioLoadedHTML) {
 
-    const height = cheerioLoadedHTML('div.flex.justify-between.mt-2')
-    .eq(7)
-    .children()
-    .eq(1)
-    .text()
-    .trim()
+    const heightRow = cheerioLoadedHTML('div.flex.justify-between.mt-2')
+    .filter((index, element) => {
+        return cheerioLoadedHTML(element).children().eq(0).text().trim() === 'Height'
+    });
 
-    return height
-
-
+    if(heightRow.length > 0) {
+        const heightContainer = heightRow.children().eq(1).clone()
+        const heightMetricOnly = heightContainer.text().split('|')[0].trim()
+        return heightMetricOnly
+    }
 }
 
 function getWeight(cheerioLoadedHTML) {
 
-    const weight = cheerioLoadedHTML('div.flex.justify-between.mt-2')
-    .eq(8)
-    .children()
-    .eq(1)
-    .text()
-    .trim()
+    const weightRow = cheerioLoadedHTML('div.flex.justify-between.mt-2')
+    .filter((index, element) => {
+        return cheerioLoadedHTML(element).children().eq(0).text().trim() === 'Weight'
+    });
 
-    return weight
+    if(weightRow.length > 0) {
+        const weightContainer = weightRow.children().eq(1).clone()
+        const weightMetricOnly = weightContainer.text().split('|')[0].trim()
+        return weightMetricOnly
+    }
 }
 
 function getBodyType(cheerioLoadedHTML) {
-    const bodyType = cheerioLoadedHTML('div.flex.justify-between.mt-2')
-    .eq(9)
-    .children()
-    .eq(1)
-    .text()
-    .trim()
+    const bodyTypeRow = cheerioLoadedHTML('div.flex.justify-between.mt-2')
+    .filter((index, element) => {
+        return cheerioLoadedHTML(element).children().eq(0).text().trim() === 'Body Type'
+    });
 
-    return bodyType
+    if(bodyTypeRow.length > 0) {
+        return bodyTypeRow.children().eq(1).text().trim();
+    }
 }
 
 function getAge(cheerioLoadedHTML) {
-    const age = cheerioLoadedHTML('div.flex.justify-between.mt-2')
-    .eq(10)
-    .children()
-    .eq(1)
-    .text()
-    .trim()
+    const ageRow = cheerioLoadedHTML('div.flex.justify-between.mt-2')
+    .filter((index, element) => {
+        return cheerioLoadedHTML(element).children().eq(0).text().trim() === 'Age'
+    });
 
-    return age
+    if(ageRow.length > 0) {
+        return ageRow.children().eq(1).text().trim();
+    }
 }
 
 function getPlayerID(cheerioLoadedHTML) {
-    const playerID = cheerioLoadedHTML('div.flex.justify-between.mt-2')
-    .eq(11)
-    .children()
-    .eq(1)
-    .text()
-    .trim()
+    const playerIDRow = cheerioLoadedHTML('div.flex.justify-between.mt-2')
+    .filter((index, element) => {
+        return cheerioLoadedHTML(element).children().eq(0).text().trim() === 'Player ID'
+    });
 
-    return playerID
+    if(playerIDRow.length > 0) {
+        return playerIDRow.children().eq(1).text().trim();
+    }
 }
 
 function getItemID(cheerioLoadedHTML) {
-    const itemID = cheerioLoadedHTML('div.flex.justify-between.mt-2')
-    .eq(12)
-    .children()
-    .eq(1)
-    .text()
-    .trim()
+    const itemIDRow = cheerioLoadedHTML('div.flex.justify-between.mt-2')
+    .filter((index, element) => {
+        return cheerioLoadedHTML(element).children().eq(0).text().trim() === 'Item ID'
+    });
 
-    return itemID
+    if(itemIDRow.length > 0) {
+    return itemIDRow.children().eq(1).text().trim();
+    }
 }
 
 function getAddedOn(cheerioLoadedHTML) {
-    const addedOn = cheerioLoadedHTML('div.flex.justify-between.mt-2')
-    .eq(13)
-    .children()
-    .eq(1)
-    .text()
-    .trim()
+    const addedOnRow = cheerioLoadedHTML('div.flex.justify-between.mt-2')
+    .filter((index, element) => {
+        return cheerioLoadedHTML(element).children().eq(0).text().trim() === 'Added on'
+    });
 
-    return addedOn
+    if(addedOnRow.length > 0) {
+    return addedOnRow.children().eq(1).text().trim();
+    }
 }
 
 export { getPlayerNameShort, getPlayerNameFull, getOverallRating, getClub, getNationality, getLeague, getFoot, 
