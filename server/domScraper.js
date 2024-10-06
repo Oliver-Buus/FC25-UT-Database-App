@@ -24,15 +24,22 @@ function getPlayerNameFull(cheerioLoadedHTML) {
     if(nameRow.length > 0) {
         return nameRow.children().eq(1).text().trim();
     }
+
+    return null
 }
 
 function getOverallRating(cheerioLoadedHTML) {
 
-    let ovr = cheerioLoadedHTML('span.text-lighter-gray.font-bold.hidden.md\\:inline-block.text-base.ml-2')
-    .text()
-    .trim()
+    try {
+        let ovr = cheerioLoadedHTML('span.text-lighter-gray.font-bold.hidden.md\\:inline-block.text-base.ml-2')
+        .text()
+        .trim()
+    
+        return ovr.split(' ')[0]
 
-    return ovr.split(' ')[0]
+    } catch (error) {
+        return null
+    }
 }
 
 function getClub(cheerioLoadedHTML) {
@@ -66,6 +73,8 @@ function getNationality(cheerioLoadedHTML) {
 
         return nation;
     }
+
+    return null
 }
 
 function getLeague(cheerioLoadedHTML) {
@@ -81,6 +90,8 @@ function getLeague(cheerioLoadedHTML) {
 
         return league;
     }
+
+    return null
 }
 
 function getFoot(cheerioLoadedHTML) {
@@ -93,6 +104,8 @@ function getFoot(cheerioLoadedHTML) {
     if(footRow.length > 0) {
         return footRow.children().eq(1).text().trim();
     }
+
+    return null
 }
 
 function getSkillMoves(cheerioLoadedHTML) {
@@ -108,6 +121,8 @@ function getSkillMoves(cheerioLoadedHTML) {
         const skillMoves = skillMovesSpanRemoved.text().trim()
         return skillMoves
     }
+
+    return null
 }
 
 function getWeakFoot(cheerioLoadedHTML) {
@@ -123,6 +138,8 @@ function getWeakFoot(cheerioLoadedHTML) {
         const weakFoot = weakFootSpanRemoved.text().trim()
         return weakFoot
     }
+
+    return null
 }
 
 function getAcceleRATE(cheerioLoadedHTML) {
@@ -135,6 +152,8 @@ function getAcceleRATE(cheerioLoadedHTML) {
     if(AcceleRATERow.length > 0) {
         return AcceleRATERow.children().eq(1).text().trim();
     }
+
+    return null
 }
 
 function getHeight(cheerioLoadedHTML) {
@@ -149,6 +168,8 @@ function getHeight(cheerioLoadedHTML) {
         const heightMetricOnly = heightContainer.text().split('|')[0].trim()
         return heightMetricOnly
     }
+
+    return null
 }
 
 function getWeight(cheerioLoadedHTML) {
@@ -163,6 +184,8 @@ function getWeight(cheerioLoadedHTML) {
         const weightMetricOnly = weightContainer.text().split('|')[0].trim()
         return weightMetricOnly
     }
+
+    return null
 }
 
 function getBodyType(cheerioLoadedHTML) {
@@ -174,6 +197,8 @@ function getBodyType(cheerioLoadedHTML) {
     if(bodyTypeRow.length > 0) {
         return bodyTypeRow.children().eq(1).text().trim();
     }
+
+    return null
 }
 
 function getAge(cheerioLoadedHTML) {
@@ -185,6 +210,8 @@ function getAge(cheerioLoadedHTML) {
     if(ageRow.length > 0) {
         return ageRow.children().eq(1).text().trim();
     }
+
+    return null
 }
 
 function getPlayerID(cheerioLoadedHTML) {
@@ -196,6 +223,8 @@ function getPlayerID(cheerioLoadedHTML) {
     if(playerIDRow.length > 0) {
         return playerIDRow.children().eq(1).text().trim();
     }
+
+    return null
 }
 
 function getItemID(cheerioLoadedHTML) {
@@ -207,6 +236,8 @@ function getItemID(cheerioLoadedHTML) {
     if(itemIDRow.length > 0) {
     return itemIDRow.children().eq(1).text().trim();
     }
+
+    return null
 }
 
 function getAddedOn(cheerioLoadedHTML) {
@@ -218,6 +249,8 @@ function getAddedOn(cheerioLoadedHTML) {
     if(addedOnRow.length > 0) {
     return addedOnRow.children().eq(1).text().trim();
     }
+
+    return null
 }
 
 export { getPlayerNameShort, getPlayerNameFull, getOverallRating, getClub, getNationality, getLeague, getFoot, 
