@@ -18,9 +18,6 @@ const players = await helper.runTest();
 
 app.get('/', async (req, res) => {
     try {
-        const url = 'https://www.fut.gg/players/?page='
-        //max page er 933
-
         players.sort((a, b) => b.overall - a.overall)
         // Render Pug view og send spillernavne
         res.render('fp', { players: players });
